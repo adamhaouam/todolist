@@ -57,6 +57,33 @@ header, footer {
     text-align: center;
 }
 
+.projectEntry, .taskEntry {
+    padding: 5px;
+    margin: 5px;
+    background-color: lightgray;
+    border: solid 2px black;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.projectEntry:hover, .taskEntry:hover {
+    background-color: gray;
+    cursor: pointer;
+
+}
+
+.icons {
+    visibility: hidden;
+    display: flex;
+    gap: 10px;
+}
+
+.projectEntry:hover .icons, .taskEntry:hover .icons {
+    visibility: visible;
+}
+
+
 * {
   border: solid 1px black;
 }
