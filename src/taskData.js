@@ -1,25 +1,42 @@
-class Task {
-    constructor(name, detail, priority, done = false) {
+class Entry {
+    constructor(name, isDeleted = false) {
         this.name = name;
+        this.isDeleted = isDeleted;
+    }
+
+    deleteThis() {
+        this.isDeleted = true;
+    }
+}
+
+
+class Task extends Entry {
+    constructor(name, detail, priority, done = false, isDeleted = false, id = crypto.randomUUID()) {
+        super(name, isDeleted);
+        this.id = id;
         this.detail = detail;
         this.priority = priority;
         this.done = done;
     }
 
-    //toggleDone
+    toggleDone() {
+        this.done = !this.done;
+    }
 }
 
-class Project {
-    constructor(name) {
-        this.name = name;
+class Project extends Entry {
+    constructor(name, isDeleted = false, id = crypto.randomUUID()) {
+        super(name, isDeleted);
+        this.id = id;
         this.tasks = [];
     }
 
     addTask(task) {
         this.tasks.push(task);
     }
-
-    //deleteTask
+    editName(newName) {
+        this.name = newName;
+    }   
 }
 
 class ProjectList {
@@ -30,8 +47,6 @@ class ProjectList {
     addProject(project) {
         this.projects.push(project);
     }
-
-    //DeleteProject
 }
 
 export { Task, Project, ProjectList };
