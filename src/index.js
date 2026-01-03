@@ -36,7 +36,6 @@ function updateDOM() {
             noProjectsMsg.classList.add("projectEntry");
             noProjectsMsg.textContent = "No projects available. Please add a new project.";
             projectList.appendChild(noProjectsMsg);
-            return;
     }
 
     for (const project in defaultProjectList.projects) {
@@ -90,6 +89,16 @@ function updateDOM() {
         projectList.appendChild(projectBox);
         }
     }
+    
+    //add field for adding new project
+    const addProjectBox = document.createElement("div");
+    addProjectBox.classList.add("projectEntry", "newProjectEntry");
+    addProjectBox.textContent = "+ Add New Project";
+    addProjectBox.addEventListener("click", function() {
+        console.log("Add Project clicked");
+        //Open window to add new project
+    });
+    projectList.appendChild(addProjectBox);
 
     //Update Task List (set to only show tasks of default project)
     if (defaultProjectList.projects[selectedProject].tasks.filter(tsk => tsk.isDeleted === false).length === 0) {
@@ -97,7 +106,6 @@ function updateDOM() {
             noTasksMsg.classList.add("taskEntry");
             noTasksMsg.textContent = "No tasks available. Please add a new task.";
             taskList.appendChild(noTasksMsg);
-            return;
     }
     for (const task in defaultProjectList.projects[selectedProject].tasks) {
         if (defaultProjectList.projects[selectedProject].tasks[task].isDeleted === false) {
@@ -146,8 +154,15 @@ function updateDOM() {
         }
     }
 
-   
-    
+    //add field for adding new task
+    const addTaskBox = document.createElement("div");
+    addTaskBox.classList.add("taskEntry", "newTaskEntry");
+    addTaskBox.textContent = "+ Add New Task";
+    addTaskBox.addEventListener("click", function() {
+        console.log("Add Task clicked");
+        //Open window to add new task
+    });
+    taskList.appendChild(addTaskBox);
 }
 
 console.log(defaultProjectList.projects);

@@ -84,6 +84,16 @@ header, footer {
 }
 
 
+.newProjectEntry, .newTaskEntry {
+    padding: 5px;
+    margin: 5px;
+    background-color: lightgreen;
+    border: dotted 3px black;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
 * {
   border: solid 1px black;
 }
