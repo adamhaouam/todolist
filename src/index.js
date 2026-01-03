@@ -9,7 +9,7 @@ console.log("Webpack src successful!");
 let selectedProject = 0;
 
 //test data
-//creates 2 projects with 2 tasks in the default project
+//creates 2 projects with 2 tasks in the default project and 1 task in the 2nd project
 const defaultProjectList = new ProjectList();
 const defaultProject = new Project("Default Project");
 defaultProjectList.addProject(defaultProject);
@@ -25,26 +25,35 @@ project2.addTask(task3);
 
 
 
-function updateDOM(currentProject = 0) {
+function updateDOM() {
     //Clear existing entries
     projectList.replaceChildren();
     taskList.replaceChildren();
 
     //Update Project List
+    if (defaultProjectList.projects.filter(proj => proj.isDeleted === false).length === 0) {
+            const noProjectsMsg = document.createElement("div");
+            noProjectsMsg.classList.add("projectEntry");
+            noProjectsMsg.textContent = "No projects available. Please add a new project.";
+            projectList.appendChild(noProjectsMsg);
+            return;
+    }
+
     for (const project in defaultProjectList.projects) {
+        if (defaultProjectList.projects[project].isDeleted === false) {
+            //create project box for each project
         const projectBox = document.createElement("div");
         projectBox.classList.add("projectEntry");
-
         const projectTitle = document.createElement("h3");
         projectTitle.textContent = defaultProjectList.projects[project].name;
         projectBox.appendChild(projectTitle);
 
+        //add icons for edit and delete
         const projectIcons = document.createElement("div");
         projectIcons.classList.add("icons");
-
-        //To replace "del" and "edit" text with icons later
         const editIcon = document.createElement("span");
         editIcon.classList.add("editIcon");
+        //To replace "del" and "edit" text with icons later
         editIcon.textContent = "Edit";
         projectIcons.appendChild(editIcon);
         const deleteIcon = document.createElement("span");
@@ -52,6 +61,7 @@ function updateDOM(currentProject = 0) {
         deleteIcon.textContent = "Del";
         projectIcons.appendChild(deleteIcon);
 
+        //Add event listener for selecting project
         projectBox.addEventListener('click', function() {
             console.log("box clicked");
             // Highlight selected task box
@@ -60,66 +70,73 @@ function updateDOM(currentProject = 0) {
             updateDOM();
         });
 
+        //Event listeners for edit
         editIcon.addEventListener("click", function(event) {
             console.log("edit button clicked")
             event.stopPropagation();
             updateDOM();
         });
+
+        //Event listeners for delete
         deleteIcon.addEventListener("click", function(event) {
-            console.log("delete button clicked")
+            console.log("delete button clicked!")
+            defaultProjectList.projects[project].deleteThis();
             event.stopPropagation();
             updateDOM();
         });
 
+        //apend icons to project box and project box to project list
         projectBox.appendChild(projectIcons);
-
         projectList.appendChild(projectBox);
-
+        }
     }
 
     //Update Task List (set to only show tasks of default project)
     for (const task in defaultProjectList.projects[selectedProject].tasks) {
-        const taskBox = document.createElement("div");
-        taskBox.classList.add("taskEntry");
+        if (defaultProjectList.projects[selectedProject].tasks[task].isDeleted === false) {
+            const taskBox = document.createElement("div");
+            taskBox.classList.add("taskEntry");
 
-        const taskTitle = document.createElement("h3");
-        taskTitle.textContent = defaultProjectList.projects[selectedProject].tasks[task].name;
-        taskBox.appendChild(taskTitle);
-        const taskIcons = document.createElement("div");
-        taskIcons.classList.add("icons");
+            const taskTitle = document.createElement("h3");
+            taskTitle.textContent = defaultProjectList.projects[selectedProject].tasks[task].name;
+            taskBox.appendChild(taskTitle);
+            const taskIcons = document.createElement("div");
+            taskIcons.classList.add("icons");
 
-        //To replace "del" and "edit" text with icons later
-        const editIcon = document.createElement("span");
-        editIcon.classList.add("editIcon");
-        editIcon.textContent = "Edit";
-        taskIcons.appendChild(editIcon);
-        const deleteIcon = document.createElement("span");
-        deleteIcon.classList.add("deleteIcon");
-        deleteIcon.textContent = "Del";
-        taskIcons.appendChild(deleteIcon);
-        taskBox.appendChild(taskIcons); 
+            //To replace "del" and "edit" text with icons later
+            const editIcon = document.createElement("span");
+            editIcon.classList.add("editIcon");
+            editIcon.textContent = "Edit";
+            taskIcons.appendChild(editIcon);
+            const deleteIcon = document.createElement("span");
+            deleteIcon.classList.add("deleteIcon");
+            deleteIcon.textContent = "Del";
+            taskIcons.appendChild(deleteIcon);
+            taskBox.appendChild(taskIcons); 
 
-        taskBox.addEventListener('click', function() {
-            console.log("box clicked");
-            // Highlight selected task box
-            updateDOM();
-        });
+            taskBox.addEventListener('click', function() {
+                console.log("box clicked");
+                // Highlight selected task box
+                updateDOM();
+            });
 
-        editIcon.addEventListener("click", function(event) {
-            console.log("edit button clicked")
-            //Open window to edit task
-            event.stopPropagation();
-            updateDOM();
-        });
-        deleteIcon.addEventListener("click", function(event) {
-            console.log("delete button clicked")
-            defaultProjectList.projects[selectedProject].tasks[task].deleteThis();
-            console.log(defaultProjectList.projects[selectedProject].tasks[task].isDeleted);
-            event.stopPropagation();
-            updateDOM();
-        });
+            editIcon.addEventListener("click", function(event) {
+                console.log("edit button clicked")
+                //Open window to edit task
+                event.stopPropagation();
+                updateDOM();
+            });
+            deleteIcon.addEventListener("click", function(event) {
+                console.log("delete button clicked")
+                //need to add confirmation dialog before deleting
+                defaultProjectList.projects[selectedProject].tasks[task].deleteThis();
+                //console.log(defaultProjectList.projects[selectedProject].tasks[task].isDeleted);
+                event.stopPropagation();
+                updateDOM();
+            });
 
-        taskList.appendChild(taskBox);
+            taskList.appendChild(taskBox);
+        }
     }
 
    

@@ -5,6 +5,7 @@ class Entry {
     }
 
     deleteThis() {
+        console.log("Deleting entry: " + this.name);
         this.isDeleted = true;
     }
 }
