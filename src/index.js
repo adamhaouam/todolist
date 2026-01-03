@@ -27,6 +27,7 @@ projectSubmit.addEventListener("click", function() {
         addNewProject(projectNameField.value);
         projectNameField.value = "";
         newProjectMenu.close();
+        selectedProject = findLastSelectedProject();
         updateDOM();
     }
     
@@ -230,6 +231,15 @@ function findFirstUndeletedProject() {
         console.log("Checking", defaultProjectList.projects[project])
         if (defaultProjectList.projects[project].isDeleted === false) {
             return project;
+        }
+    }
+    return null;
+}
+
+function findLastSelectedProject() {
+    for (let i = defaultProjectList.projects.length - 1; i >= 0; i--) {
+        if (defaultProjectList.projects[i].isDeleted === false) {
+            return i;
         }
     }
     return null;

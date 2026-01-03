@@ -110,12 +110,9 @@ header, footer {
 }
 
 
-#taskSubmit {
+#taskSubmit, #projectSubmit {
   grid-column: span 2;
   padding: 10px 30px;
   justify-self: center;
 }
 
-* {
-  border: solid 1px black;
-}
