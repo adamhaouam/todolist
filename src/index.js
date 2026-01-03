@@ -25,7 +25,6 @@ projectSubmit.addEventListener("click", function() {
     }
     else {
         addNewProject(projectNameField.value);
-        //clear field
         projectNameField.value = "";
         newProjectMenu.close();
         updateDOM();
@@ -39,7 +38,6 @@ taskSubmit.addEventListener("click", function() {
     }
     else {
         addNewTask(taskNameField.value, taskDescField.value, taskDueField.value, taskPriorityField.value);
-        //clear fields
         taskNameField.value = "";
         taskDescField.value = "";
         taskDueField.value = "";
@@ -50,7 +48,7 @@ taskSubmit.addEventListener("click", function() {
     
 });
 
-let selectedProject = 0;
+
 
 //test data
 //creates 2 projects with 2 tasks in the default project and 1 task in the 2nd project
@@ -67,6 +65,7 @@ const task3 = new Task("Task 3", "Third Task", "High", false);
 project2.addTask(task3);
 
 
+let selectedProject = findFirstUndeletedProject();
 
 
 function updateDOM() {
@@ -124,6 +123,9 @@ function updateDOM() {
         deleteIcon.addEventListener("click", function(event) {
             console.log("delete button clicked!")
             defaultProjectList.projects[project].deleteThis();
+            if (selectedProject == project) {
+                selectedProject = findFirstUndeletedProject();
+            };
             event.stopPropagation();
             updateDOM();
         });
@@ -190,7 +192,6 @@ function updateDOM() {
                 console.log("delete button clicked")
                 //need to add confirmation dialog before deleting
                 defaultProjectList.projects[selectedProject].tasks[task].deleteThis();
-                //console.log(defaultProjectList.projects[selectedProject].tasks[task].isDeleted);
                 event.stopPropagation();
                 updateDOM();
             });
@@ -206,7 +207,6 @@ function updateDOM() {
     addTaskBox.addEventListener("click", function() {
         console.log("Add Task clicked");
         newTaskMenu.showModal();
-        //Open window to add new task
     });
     taskList.appendChild(addTaskBox);
 }
@@ -225,6 +225,15 @@ function addNewTask(name, desc, dueDate, priority) {
     defaultProjectList.projects[selectedProject].addTask(newTask);
 }
 
+function findFirstUndeletedProject() {
+    for (const project in defaultProjectList.projects) {
+        console.log("Checking", defaultProjectList.projects[project])
+        if (defaultProjectList.projects[project].isDeleted === false) {
+            return project;
+        }
+    }
+    return null;
+}
 
 
 updateDOM();
