@@ -1,6 +1,6 @@
 import "./styles.css";
 import '../node_modules/modern-normalize';
-import { Task, Project, ProjectList, refreshDOM } from "./taskData.js";
+import { Task, Project, ProjectList } from "./taskData.js";
 
 const projectList = document.getElementById("projectList");
 const taskList = document.getElementById("TaskList");
@@ -9,6 +9,11 @@ const newProjectMenu = document.getElementById("newProjectMenu");
 const newProjectForm = document.getElementById("newProjectForm");
 const projectNameField = document.getElementById("projectName");
 const projectSubmit = document.getElementById("projectSubmit");
+
+const editProjectMenu = document.getElementById("editProjectMenu");
+const editProjectForm = document.getElementById("editProjectForm");
+const projectEditNameField = document.getElementById("projectEditName");
+const projectEditSubmit = document.getElementById("projectEditSubmit");
 
 const newTaskMenu = document.getElementById("newTaskMenu");
 const taskForm = document.getElementById("newTaskForm");
@@ -32,6 +37,20 @@ projectSubmit.addEventListener("click", function() {
     }
     
 });
+
+projectEditSubmit.addEventListener("click", function() {
+    if (!editProjectForm.checkValidity()) {
+        alert("Please fill out all required fields.");
+    }
+    else {
+        defaultProjectList.projects[selectedProject].editName(projectEditNameField.value);
+        projectEditNameField.value = "";
+        editProjectMenu.close();
+        updateDOM();
+    }
+    
+});
+
 
 taskSubmit.addEventListener("click", function() {
     if (!taskForm.checkValidity()) {
@@ -115,9 +134,10 @@ function updateDOM() {
 
         //Event listeners for edit
         editIcon.addEventListener("click", function(event) {
-            console.log("edit button clicked")
-            event.stopPropagation();
-            updateDOM();
+            console.log("edit button clicked");
+            selectedProject = project;
+            editProjectMenu.showModal();
+            projectEditNameField.value = defaultProjectList.projects[selectedProject].name;
         });
 
         //Event listeners for delete
@@ -211,13 +231,10 @@ function updateDOM() {
     });
     taskList.appendChild(addTaskBox);
 }
-updateDOM();
-
 
 function addNewProject(name) {
     const newProject = new Project(name);
     defaultProjectList.addProject(newProject);
-    updateDOM();
 }
 
 function addNewTask(name, desc, dueDate, priority) {
@@ -225,6 +242,12 @@ function addNewTask(name, desc, dueDate, priority) {
     const newTask = new Task(name, desc, dueDate, priority);
     defaultProjectList.projects[selectedProject].addTask(newTask);
 }
+
+//Edit Project
+function editProject(newName) {
+    defaultProjectList.projects[selectedProject].editName(newName);
+}
+//Edit Task
 
 function findFirstUndeletedProject() {
     for (const project in defaultProjectList.projects) {

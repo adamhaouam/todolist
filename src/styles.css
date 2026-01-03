@@ -103,7 +103,7 @@ header, footer {
   padding: 30px;
 }
 
-#newTaskForm {
+#newTaskForm, #newProjectForm {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
