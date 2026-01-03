@@ -92,6 +92,13 @@ function updateDOM() {
     }
 
     //Update Task List (set to only show tasks of default project)
+    if (defaultProjectList.projects[selectedProject].tasks.filter(tsk => tsk.isDeleted === false).length === 0) {
+            const noTasksMsg = document.createElement("div");
+            noTasksMsg.classList.add("taskEntry");
+            noTasksMsg.textContent = "No tasks available. Please add a new task.";
+            taskList.appendChild(noTasksMsg);
+            return;
+    }
     for (const task in defaultProjectList.projects[selectedProject].tasks) {
         if (defaultProjectList.projects[selectedProject].tasks[task].isDeleted === false) {
             const taskBox = document.createElement("div");
