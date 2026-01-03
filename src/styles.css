@@ -94,7 +94,7 @@ header, footer {
     cursor: pointer;
 }
 
-#newTaskMenu {
+#newTaskMenu, #newProjectMenu {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -109,9 +109,6 @@ header, footer {
   gap: 10px;
 }
 
-#newProjectMenu {
-  display: none;
-}
 
 #taskSubmit {
   grid-column: span 2;

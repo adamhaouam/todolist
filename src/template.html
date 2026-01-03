@@ -19,15 +19,16 @@
             <div class="taskEntry"><h3>Template Task Listing</h3><div class="icons"><span class="editIcon">Edit</span><span class="editIcon">Del</span></div></div>
         </div>
     </div>
+
     <dialog id="newProjectMenu">
         <h2>New Project</h2>
         <form id="newProjectForm">
             <label for="projectName">Project Name:</label>
             <input type="text" id="projectName" name="projectName" required>
-            <br>
-            <input type="submit" value="Create Project">
+            <button id="projectSubmit" type="button">Save Task</button>
         </form>
     </dialog>
+
     <dialog id="newTaskMenu">
         <h2 id="taskFormTitle">New Task</h2>
         <form id="newTaskForm">
@@ -46,6 +47,7 @@
             <button id="taskSubmit" type="button">Create Task</button>
         </form>
     </dialog>
+    
     <div id="editProjectMenu"></div>
     <div id="editTaskMenu"></div>
     <footer>

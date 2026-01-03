@@ -4,20 +4,50 @@ import { Task, Project, ProjectList, refreshDOM } from "./taskData.js";
 
 const projectList = document.getElementById("projectList");
 const taskList = document.getElementById("TaskList");
-const addTaskMenu = document.getElementById("newTaskMenu");
+
+const newProjectMenu = document.getElementById("newProjectMenu");
+const newProjectForm = document.getElementById("newProjectForm");
+const projectNameField = document.getElementById("projectName");
+const projectSubmit = document.getElementById("projectSubmit");
+
+const newTaskMenu = document.getElementById("newTaskMenu");
+const taskForm = document.getElementById("newTaskForm");
 const taskNameField = document.getElementById("taskName");
 const taskDescField = document.getElementById("taskDesc");
 const taskDueField = document.getElementById("taskDueDate");
 const taskPriorityField = document.getElementById("taskPriority");
 const taskSubmit = document.getElementById("taskSubmit");
 
+
+projectSubmit.addEventListener("click", function() {
+    if (!newProjectForm.checkValidity()) {
+        alert("Please fill out all required fields.");
+    }
+    else {
+        addNewProject(projectNameField.value);
+        //clear field
+        projectNameField.value = "";
+        newProjectMenu.close();
+        updateDOM();
+    }
+    
+});
+
 taskSubmit.addEventListener("click", function() {
-    addNewTask(taskNameField.value, taskDescField.value, taskDueField.value, taskPriorityField.value);
-    //clear fields
-    // taskNameField.value = "";
-    // taskDescField.value = "";
-    // taskDueField.value = "";
-    // taskPriorityField.value = "Low";
+    if (!taskForm.checkValidity()) {
+        alert("Please fill out all required fields.");
+    }
+    else {
+        addNewTask(taskNameField.value, taskDescField.value, taskDueField.value, taskPriorityField.value);
+        //clear fields
+        taskNameField.value = "";
+        taskDescField.value = "";
+        taskDueField.value = "";
+        taskPriorityField.value = "Low";
+        newTaskMenu.close();
+        updateDOM();
+    }
+    
 });
 
 let selectedProject = 0;
@@ -109,7 +139,8 @@ function updateDOM() {
     addProjectBox.classList.add("projectEntry", "newProjectEntry");
     addProjectBox.textContent = "+ Add New Project";
     addProjectBox.addEventListener("click", function() {
-        console.log("Add Project clicked");
+        console.log("Add Project clicked123");
+        newProjectMenu.showModal();
         //Open window to add new project
     });
     projectList.appendChild(addProjectBox);
@@ -174,7 +205,7 @@ function updateDOM() {
     addTaskBox.textContent = "+ Add New Task";
     addTaskBox.addEventListener("click", function() {
         console.log("Add Task clicked");
-        addTaskMenu.showModal();
+        newTaskMenu.showModal();
         //Open window to add new task
     });
     taskList.appendChild(addTaskBox);
@@ -192,44 +223,8 @@ function addNewTask(name, desc, dueDate, priority) {
     console.log(`Adding new task: ${name}, ${desc}, ${dueDate}, ${priority}`);
     const newTask = new Task(name, desc, dueDate, priority);
     defaultProjectList.projects[selectedProject].addTask(newTask);
-    addTaskMenu.close();
-    updateDOM();
 }
 
-// function createTaskForm() {
-//     const form = document.getElementById("menu");
 
-
-//     addButton.textContent = "Add Task";
-//     addButton.addEventListener("click", function() {
-//         addNewTask(nameField.value, descField.value, "", "", "", false);
-//     });
-
-//     form.appendChild(nameField);
-//     form.appendChild(addButton);
-
-//     updateDOM();
-// }
-
-
-function createProjectForm() {
-    const form = document.getElementById("menu");
-    // const nameField = document.createElement("input");
-    // nameField.setAttribute("type", "text");
-    // nameField.setAttribute("value", "fsdfasdfawsefasdfasdf");
-    // nameField.setAttribute("id", "newProjectName");
-    // nameField.setAttribute("placeholder", "Project Name");
-
-    // const addButton = document.createElement("button");
-    // addButton.textContent = "Add Project";
-    // addButton.addEventListener("click", function() {
-    //     addNewProject(nameField.value);
-    // });
-
-    form.appendChild(nameField);
-    form.appendChild(addButton);
-
-    updateDOM();
-}
 
 updateDOM();
