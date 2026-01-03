@@ -4,7 +4,21 @@ import { Task, Project, ProjectList, refreshDOM } from "./taskData.js";
 
 const projectList = document.getElementById("projectList");
 const taskList = document.getElementById("TaskList");
-console.log("Webpack src successful!");
+const addTaskMenu = document.getElementById("newTaskMenu");
+const taskNameField = document.getElementById("taskName");
+const taskDescField = document.getElementById("taskDesc");
+const taskDueField = document.getElementById("taskDueDate");
+const taskPriorityField = document.getElementById("taskPriority");
+const taskSubmit = document.getElementById("taskSubmit");
+
+taskSubmit.addEventListener("click", function() {
+    addNewTask(taskNameField.value, taskDescField.value, taskDueField.value, taskPriorityField.value);
+    //clear fields
+    // taskNameField.value = "";
+    // taskDescField.value = "";
+    // taskDueField.value = "";
+    // taskPriorityField.value = "Low";
+});
 
 let selectedProject = 0;
 
@@ -15,7 +29,7 @@ const defaultProject = new Project("Default Project");
 defaultProjectList.addProject(defaultProject);
 const project2 = new Project("Project 2");
 defaultProjectList.addProject(project2);
-const defaultTask = new Task("Task 1", "First Task", "Low", false);
+const defaultTask = new Task("Task 1", "Some info", "date", "High");
 defaultProject.addTask(defaultTask);
 const task2 = new Task("Task 2", "Second Task", "Low", false);
 defaultProject.addTask(task2);
@@ -160,10 +174,62 @@ function updateDOM() {
     addTaskBox.textContent = "+ Add New Task";
     addTaskBox.addEventListener("click", function() {
         console.log("Add Task clicked");
+        addTaskMenu.showModal();
         //Open window to add new task
     });
     taskList.appendChild(addTaskBox);
 }
+updateDOM();
 
-console.log(defaultProjectList.projects);
+
+function addNewProject(name) {
+    const newProject = new Project(name);
+    defaultProjectList.addProject(newProject);
+    updateDOM();
+}
+
+function addNewTask(name, desc, dueDate, priority) {
+    console.log(`Adding new task: ${name}, ${desc}, ${dueDate}, ${priority}`);
+    const newTask = new Task(name, desc, dueDate, priority);
+    defaultProjectList.projects[selectedProject].addTask(newTask);
+    addTaskMenu.close();
+    updateDOM();
+}
+
+// function createTaskForm() {
+//     const form = document.getElementById("menu");
+
+
+//     addButton.textContent = "Add Task";
+//     addButton.addEventListener("click", function() {
+//         addNewTask(nameField.value, descField.value, "", "", "", false);
+//     });
+
+//     form.appendChild(nameField);
+//     form.appendChild(addButton);
+
+//     updateDOM();
+// }
+
+
+function createProjectForm() {
+    const form = document.getElementById("menu");
+    // const nameField = document.createElement("input");
+    // nameField.setAttribute("type", "text");
+    // nameField.setAttribute("value", "fsdfasdfawsefasdfasdf");
+    // nameField.setAttribute("id", "newProjectName");
+    // nameField.setAttribute("placeholder", "Project Name");
+
+    // const addButton = document.createElement("button");
+    // addButton.textContent = "Add Project";
+    // addButton.addEventListener("click", function() {
+    //     addNewProject(nameField.value);
+    // });
+
+    form.appendChild(nameField);
+    form.appendChild(addButton);
+
+    updateDOM();
+}
+
 updateDOM();

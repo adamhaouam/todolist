@@ -12,12 +12,12 @@ class Entry {
 
 
 class Task extends Entry {
-    constructor(name, detail, priority, done = false, isDeleted = false, id = crypto.randomUUID()) {
+    constructor(name, desc, dueDate, priority, status = false, id = crypto.randomUUID(), isDeleted = false) {
         super(name, isDeleted);
         this.id = id;
-        this.detail = detail;
+        this.detail = desc;
         this.priority = priority;
-        this.done = done;
+        this.done = status;
     }
 
     toggleDone() {

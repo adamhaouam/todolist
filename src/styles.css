@@ -94,6 +94,31 @@ header, footer {
     cursor: pointer;
 }
 
+#newTaskMenu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(111, 134, 207);
+  padding: 30px;
+}
+
+#newTaskForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+#newProjectMenu {
+  display: none;
+}
+
+#taskSubmit {
+  grid-column: span 2;
+  padding: 10px 30px;
+  justify-self: center;
+}
+
 * {
   border: solid 1px black;
 }

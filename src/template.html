@@ -19,6 +19,35 @@
             <div class="taskEntry"><h3>Template Task Listing</h3><div class="icons"><span class="editIcon">Edit</span><span class="editIcon">Del</span></div></div>
         </div>
     </div>
+    <dialog id="newProjectMenu">
+        <h2>New Project</h2>
+        <form id="newProjectForm">
+            <label for="projectName">Project Name:</label>
+            <input type="text" id="projectName" name="projectName" required>
+            <br>
+            <input type="submit" value="Create Project">
+        </form>
+    </dialog>
+    <dialog id="newTaskMenu">
+        <h2 id="taskFormTitle">New Task</h2>
+        <form id="newTaskForm">
+            <label for="taskName">Task Name:</label>
+            <input type="text" id="taskName" name="taskName" required>
+            <label for="taskDesc">Description:</label>
+            <textarea id="taskDesc" name="taskDesc"></textarea>
+            <label for="taskDueDate">Due Date:</label>
+            <input type="date" id="taskDueDate" name="taskDueDate">
+            <label for="taskPriority">Priority:</label>
+            <select id="taskPriority" name="taskPriority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+            <button id="taskSubmit" type="button">Create Task</button>
+        </form>
+    </dialog>
+    <div id="editProjectMenu"></div>
+    <div id="editTaskMenu"></div>
     <footer>
         <span>Created by Adam Haouam for <a href="https://www.theodinproject.com/lessons/node-path-javascript-todo-list">The Odin Project</a></span>
         <span><a href="https://github.com/adamhaouam">GitHub Page</a></span> 
