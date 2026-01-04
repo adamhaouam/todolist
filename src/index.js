@@ -86,6 +86,7 @@ project2.addTask(task3);
 
 
 let selectedProject = findFirstUndeletedProject();
+let selectedTask = findFirstUndeletedTask();
 
 
 function updateDOM() {
@@ -104,56 +105,62 @@ function updateDOM() {
     for (const project in defaultProjectList.projects) {
         if (defaultProjectList.projects[project].isDeleted === false) {
             //create project box for each project
-        const projectBox = document.createElement("div");
-        projectBox.classList.add("projectEntry");
-        const projectTitle = document.createElement("h3");
-        projectTitle.textContent = defaultProjectList.projects[project].name;
-        projectBox.appendChild(projectTitle);
+            const projectBox = document.createElement("div");
+            projectBox.classList.add("projectEntry");
 
-        //add icons for edit and delete
-        const projectIcons = document.createElement("div");
-        projectIcons.classList.add("icons");
-        const editIcon = document.createElement("span");
-        editIcon.classList.add("editIcon");
-        //To replace "del" and "edit" text with icons later
-        editIcon.textContent = "Edit";
-        projectIcons.appendChild(editIcon);
-        const deleteIcon = document.createElement("span");
-        deleteIcon.classList.add("deleteIcon");
-        deleteIcon.textContent = "Del";
-        projectIcons.appendChild(deleteIcon);
+            //change colour if selected
+            if (project == selectedProject) {
+                projectBox.classList.add("selected");
+            }
 
-        //Add event listener for selecting project
-        projectBox.addEventListener('click', function() {
-            console.log("box clicked");
-            // Highlight selected task box
-            selectedProject = project;
-            console.log("Selected Project: " + selectedProject);
-            updateDOM();
-        });
+            const projectTitle = document.createElement("h3");
+            projectTitle.textContent = defaultProjectList.projects[project].name;
+            projectBox.appendChild(projectTitle);
 
-        //Event listeners for edit
-        editIcon.addEventListener("click", function(event) {
-            console.log("edit button clicked");
-            selectedProject = project;
-            editProjectMenu.showModal();
-            projectEditNameField.value = defaultProjectList.projects[selectedProject].name;
-        });
+            //add icons for edit and delete
+            const projectIcons = document.createElement("div");
+            projectIcons.classList.add("icons");
+            const editIcon = document.createElement("span");
+            editIcon.classList.add("editIcon");
+            //To replace "del" and "edit" text with icons later
+            editIcon.textContent = "Edit";
+            projectIcons.appendChild(editIcon);
+            const deleteIcon = document.createElement("span");
+            deleteIcon.classList.add("deleteIcon");
+            deleteIcon.textContent = "Del";
+            projectIcons.appendChild(deleteIcon);
 
-        //Event listeners for delete
-        deleteIcon.addEventListener("click", function(event) {
-            console.log("delete button clicked!")
-            defaultProjectList.projects[project].deleteThis();
-            if (selectedProject == project) {
-                selectedProject = findFirstUndeletedProject();
-            };
-            event.stopPropagation();
-            updateDOM();
-        });
+            //Add event listener for selecting project
+            projectBox.addEventListener('click', function() {
+                console.log("box clicked");
+                // Highlight selected task box
+                selectedProject = project;
+                console.log("Selected Project: " + selectedProject);
+                updateDOM();
+            });
 
-        //apend icons to project box and project box to project list
-        projectBox.appendChild(projectIcons);
-        projectList.appendChild(projectBox);
+            //Event listeners for edit
+            editIcon.addEventListener("click", function(event) {
+                console.log("edit button clicked");
+                selectedProject = project;
+                editProjectMenu.showModal();
+                projectEditNameField.value = defaultProjectList.projects[selectedProject].name;
+            });
+
+            //Event listeners for delete
+            deleteIcon.addEventListener("click", function(event) {
+                console.log("delete button clicked!")
+                defaultProjectList.projects[project].deleteThis();
+                if (selectedProject == project) {
+                    selectedProject = findFirstUndeletedProject();
+                };
+                event.stopPropagation();
+                updateDOM();
+            });
+
+            //apend icons to project box and project box to project list
+            projectBox.appendChild(projectIcons);
+            projectList.appendChild(projectBox);
         }
     }
     
@@ -180,6 +187,10 @@ function updateDOM() {
             const taskBox = document.createElement("div");
             taskBox.classList.add("taskEntry");
 
+            if (task == selectedTask) {
+                taskBox.classList.add("selected");
+            }
+
             const taskTitle = document.createElement("h3");
             taskTitle.textContent = defaultProjectList.projects[selectedProject].tasks[task].name;
             taskBox.appendChild(taskTitle);
@@ -199,6 +210,8 @@ function updateDOM() {
 
             taskBox.addEventListener('click', function() {
                 console.log("box clicked");
+                selectedTask = task;
+                console.log("Selected Task: " + selectedTask);
                 // Highlight selected task box
                 updateDOM();
             });
@@ -268,5 +281,12 @@ function findLastSelectedProject() {
     return null;
 }
 
+function findFirstUndeletedTask() {
+    for (const task in defaultProjectList.projects[selectedProject].tasks) {
+        if (defaultProjectList.projects[selectedProject].tasks[task].isDeleted === false) {
+            return task;
+        }
+    }
+}
 
 updateDOM();
