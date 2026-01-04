@@ -236,14 +236,15 @@ function updateDOM() {
             taskIcons.appendChild(deleteIcon);
             taskBox.appendChild(taskIcons); 
 
+            //Select task
             taskBox.addEventListener('click', function() {
                 console.log("box clicked");
                 selectedTask = task;
                 console.log("Selected Task: " + selectedTask);
-                // Highlight selected task box
                 updateDOM();
             });
 
+            //Edit task
             editIcon.addEventListener("click", function(event) {
                 console.log("edit button clicked")
                 selectedTask = task;
@@ -252,9 +253,14 @@ function updateDOM() {
                 taskEdit.style.display = "block";
                 TaskMenu.showModal();
                 taskNameField.value = defaultProjectList.projects[selectedProject].tasks[task].name;
+                taskDescField.value = defaultProjectList.projects[selectedProject].tasks[task].detail;
+                taskDueField.value = defaultProjectList.projects[selectedProject].tasks[task].dueDate;
+                taskPriorityField.value = defaultProjectList.projects[selectedProject].tasks[task].priority;
                 event.stopPropagation();
                 updateDOM();
             });
+
+            //Delete task
             deleteIcon.addEventListener("click", function(event) {
                 console.log("delete button clicked")
                 //need to add confirmation dialog before deleting
@@ -305,6 +311,10 @@ function editProject(newName) {
 function editTask(name, desc, dueDate, priority) {
     defaultProjectList.projects[selectedProject].tasks[selectedTask].editTask(name, desc, dueDate, priority);
     //clear all fields
+    taskNameField.value = "";
+    taskDescField.value = "";
+    taskDueField.value = "";
+    taskPriorityField.value = "Low";
 }
 
 
