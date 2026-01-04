@@ -15,13 +15,16 @@ const editProjectForm = document.getElementById("editProjectForm");
 const projectEditNameField = document.getElementById("projectEditName");
 const projectEditSubmit = document.getElementById("projectEditSubmit");
 
-const newTaskMenu = document.getElementById("newTaskMenu");
-const taskForm = document.getElementById("newTaskForm");
+const TaskMenu = document.getElementById("TaskMenu");
+const taskForm = document.getElementById("TaskForm");
 const taskNameField = document.getElementById("taskName");
 const taskDescField = document.getElementById("taskDesc");
 const taskDueField = document.getElementById("taskDueDate");
 const taskPriorityField = document.getElementById("taskPriority");
 const taskSubmit = document.getElementById("taskSubmit");
+const taskEdit = document.getElementById("taskEdit");
+
+
 
 
 projectSubmit.addEventListener("click", function() {
@@ -43,13 +46,13 @@ projectEditSubmit.addEventListener("click", function() {
         alert("Please fill out all required fields.");
     }
     else {
-        defaultProjectList.projects[selectedProject].editName(projectEditNameField.value);
-        projectEditNameField.value = "";
+        editProject(projectEditNameField);
         editProjectMenu.close();
         updateDOM();
     }
     
 });
+
 
 
 taskSubmit.addEventListener("click", function() {
@@ -62,7 +65,23 @@ taskSubmit.addEventListener("click", function() {
         taskDescField.value = "";
         taskDueField.value = "";
         taskPriorityField.value = "Low";
-        newTaskMenu.close();
+        TaskMenu.close();
+        updateDOM();
+    }
+    
+});
+
+taskEdit.addEventListener("click", function() {
+    if (!taskForm.checkValidity()) {
+        alert("Please fill out all required fields.");
+    }
+    else {
+        editTask(taskNameField.value, taskDescField.value, taskDueField.value, taskPriorityField.value);
+        taskNameField.value = "";
+        taskDescField.value = "";
+        taskDueField.value = "";
+        taskPriorityField.value = "Low";
+        TaskMenu.close();
         updateDOM();
     }
     
@@ -136,6 +155,7 @@ function updateDOM() {
                 // Highlight selected task box
                 selectedProject = project;
                 console.log("Selected Project: " + selectedProject);
+                selectedTask = "";
                 updateDOM();
             });
 
@@ -218,7 +238,11 @@ function updateDOM() {
 
             editIcon.addEventListener("click", function(event) {
                 console.log("edit button clicked")
-                //Open window to edit task
+                selectedTask = task;
+                taskSubmit.style.display = "none";
+                taskEdit.style.display = "block";
+                TaskMenu.showModal();
+                taskNameField.value = defaultProjectList.projects[selectedProject].tasks[task].name;
                 event.stopPropagation();
                 updateDOM();
             });
@@ -226,6 +250,9 @@ function updateDOM() {
                 console.log("delete button clicked")
                 //need to add confirmation dialog before deleting
                 defaultProjectList.projects[selectedProject].tasks[task].deleteThis();
+                if (selectedTask == task) {
+                    selectedTask = findFirstUndeletedTask();
+                };
                 event.stopPropagation();
                 updateDOM();
             });
@@ -240,7 +267,9 @@ function updateDOM() {
     addTaskBox.textContent = "+ Add New Task";
     addTaskBox.addEventListener("click", function() {
         console.log("Add Task clicked");
-        newTaskMenu.showModal();
+        TaskMenu.showModal();
+        taskSubmit.style.display = "block";
+        taskEdit.style.display = "none";
     });
     taskList.appendChild(addTaskBox);
 }
@@ -259,8 +288,14 @@ function addNewTask(name, desc, dueDate, priority) {
 //Edit Project
 function editProject(newName) {
     defaultProjectList.projects[selectedProject].editName(newName);
+    projectEditNameField.value = "";
 }
 //Edit Task
+function editTask(name, desc, dueDate, priority) {
+    defaultProjectList.projects[selectedProject].tasks[selectedTask].editTask(name, desc, dueDate, priority);
+    //clear all fields
+}
+
 
 function findFirstUndeletedProject() {
     for (const project in defaultProjectList.projects) {

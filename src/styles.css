@@ -94,7 +94,7 @@ header, footer {
     cursor: pointer;
 }
 
-#newTaskMenu, #newProjectMenu {
+#TaskMenu, #newProjectMenu {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -103,14 +103,14 @@ header, footer {
   padding: 30px;
 }
 
-#newTaskForm, #newProjectForm {
+#TaskForm, #newProjectForm {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
 
-#taskSubmit, #projectSubmit {
+#taskSubmit, #taskEdit, #projectSubmit, #projectEdit {
   grid-column: span 2;
   padding: 10px 30px;
   justify-self: center;

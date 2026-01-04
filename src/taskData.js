@@ -16,12 +16,20 @@ class Task extends Entry {
         super(name, isDeleted);
         this.id = id;
         this.detail = desc;
+        this.dueDate = dueDate;
         this.priority = priority;
         this.done = status;
     }
 
     toggleDone() {
         this.done = !this.done;
+    }
+    
+    editTask(name, desc, dueDate, priority) {
+        this.name = name;
+        this.detail = desc;
+        this.dueDate = dueDate;
+        this.priority = priority;
     }
 }
 

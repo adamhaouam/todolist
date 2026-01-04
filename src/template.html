@@ -7,7 +7,7 @@
 </head>
 <body>
     <header>
-        To Do List
+        <h1>To Do List</h1>
     </header>
     <div id="content">
         <div id="projectTitle">Projects</div>
@@ -29,9 +29,9 @@
         </form>
     </dialog>
 
-    <dialog id="newTaskMenu">
+    <dialog id="TaskMenu">
         <h2 id="taskFormTitle">New Task</h2>
-        <form id="newTaskForm">
+        <form id="TaskForm">
             <label for="taskName">Task Name:</label>
             <input type="text" id="taskName" name="taskName" required>
             <label for="taskDesc">Description:</label>
@@ -45,6 +45,7 @@
                 <option value="high">High</option>
             </select>
             <button id="taskSubmit" type="button">Create Task</button>
+            <button id="taskEdit" type="button">Edit Task</button>
         </form>
     </dialog>
     
@@ -56,6 +57,7 @@
             <button id="projectEditSubmit" type="button">Save Task</button>
         </form>
     </dialog>
+
     <div id="editTaskMenu"></div>
     <footer>
         <span>Created by Adam Haouam for <a href="https://www.theodinproject.com/lessons/node-path-javascript-todo-list">The Odin Project</a></span>
