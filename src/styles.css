@@ -132,3 +132,15 @@ header, footer {
 * {
   border: solid red 1px;
 }
+
+.high {
+  background-color: red;
+}
+
+.medium {
+  background-color: orange;
+}
+
+.low {
+  background-color: green;
+}

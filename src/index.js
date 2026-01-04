@@ -86,11 +86,11 @@ const defaultProject = new Project("Default Project");
 defaultProjectList.addProject(defaultProject);
 const project2 = new Project("Project 2");
 defaultProjectList.addProject(project2);
-const defaultTask = new Task("Task 1", "Some info", "date", "high");
+const defaultTask = new Task("Task 1", "Some info", "2026-01-21", "high");
 defaultProject.addTask(defaultTask);
-const task2 = new Task("Task 2", "Second Task", "date", "medium");
+const task2 = new Task("Task 2", "Second Task", "", "medium");
 defaultProject.addTask(task2);
-const task3 = new Task("Task 3", "Third Task", "date", "low");
+const task3 = new Task("Task 3", "Third Task", "2026-05-21", "low");
 project2.addTask(task3);
 
 
@@ -195,7 +195,8 @@ function updateDOM() {
             taskList.appendChild(noTasksMsg);
     }
     for (const task in defaultProjectList.projects[selectedProject].tasks) {
-        if (defaultProjectList.projects[selectedProject].tasks[task].isDeleted === false) {
+        const thisTask = defaultProjectList.projects[selectedProject].tasks[task];
+        if (thisTask.isDeleted === false) {
             const taskBox = document.createElement("div");
             
             taskBox.classList.add("taskEntry");
@@ -211,13 +212,20 @@ function updateDOM() {
                 taskBox.appendChild(taskBoxExt);
                 
                 const taskPriority = document.createElement("div");
-                taskPriority.textContent = defaultProjectList.projects[selectedProject].tasks[task].priority;
+                taskPriority.textContent = capitalizeFirstLetter(thisTask.priority);
+                taskPriority.classList.add(thisTask.priority);
                 taskBoxExt.appendChild(taskPriority);
                 
+                if (thisTask.dueDate) {
+                    const taskDueDate = document.createElement("div");
+                    taskDueDate.textContent = thisTask.dueDate;
+                    taskBoxExt.appendChild(taskDueDate);
+                    console.log(thisTask.dueDate);
+                }
             }
 
             const taskTitle = document.createElement("h3");
-            taskTitle.textContent = defaultProjectList.projects[selectedProject].tasks[task].name;
+            taskTitle.textContent = thisTask.name;
             taskBoxMain.appendChild(taskTitle);
             const taskIcons = document.createElement("div");
             taskIcons.classList.add("icons");
@@ -235,9 +243,7 @@ function updateDOM() {
 
             //Select task
             taskBox.addEventListener('click', function() {
-                console.log("box clicked");
                 selectedTask = task;
-                console.log("Selected Task: " + selectedTask);
                 updateDOM();
             });
 
@@ -249,10 +255,10 @@ function updateDOM() {
                 taskSubmit.style.display = "none";
                 taskEdit.style.display = "block";
                 TaskMenu.showModal();
-                taskNameField.value = defaultProjectList.projects[selectedProject].tasks[task].name;
-                taskDescField.value = defaultProjectList.projects[selectedProject].tasks[task].detail;
-                taskDueField.value = defaultProjectList.projects[selectedProject].tasks[task].dueDate;
-                taskPriorityField.value = defaultProjectList.projects[selectedProject].tasks[task].priority;
+                taskNameField.value = thisTask.name;
+                taskDescField.value = thisTask.detail;
+                taskDueField.value = thisTask.dueDate;
+                taskPriorityField.value = thisTask.priority;
                 event.stopPropagation();
                 updateDOM();
             });
@@ -260,7 +266,7 @@ function updateDOM() {
             //Deletes currently selected task
             //TODO: need to add confirmation dialog
             deleteIcon.addEventListener("click", function(event) {
-                defaultProjectList.projects[selectedProject].tasks[task].deleteThis();
+                thisTask.deleteThis();
                 selectedTask = null;
                 event.stopPropagation();
                 updateDOM();
@@ -343,7 +349,7 @@ function findLastSelectedProject() {
 //finds first selected task
 function findFirstUndeletedTask() {
     for (const task in defaultProjectList.projects[selectedProject].tasks) {
-        if (defaultProjectList.projects[selectedProject].tasks[task].isDeleted === false) {
+        if (defaultProjectList.projects[selectedProject].tasks.isDeleted === false) {
             return task;
         }
     }
@@ -352,3 +358,11 @@ function findFirstUndeletedTask() {
 console.log(defaultProjectList)
 
 updateDOM();
+
+//Return capitalised string
+function capitalizeFirstLetter(string) {
+  if (string.length === 0) {
+    return "";
+  }
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

@@ -12,3 +12,4 @@ add a big satisfying "done" button to tasks
 Make a show deleted option (want to only hide deleted items)
 Add cancel to forms
 Add no date option
+Add form restrictions
