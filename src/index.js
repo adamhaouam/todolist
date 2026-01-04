@@ -12,11 +12,6 @@ const projectNameField = document.getElementById("projectName");
 const projectSubmit = document.getElementById("projectSubmit");
 const projectEdit = document.getElementById("projectEdit");
 
-// const editProjectMenu = document.getElementById("editProjectMenu");
-// const editProjectForm = document.getElementById("editProjectForm");
-// const projectEditNameField = document.getElementById("projectEditName");
-// const projectEditSubmit = document.getElementById("projectEditSubmit");
-
 const TaskMenu = document.getElementById("TaskMenu");
 const taskForm = document.getElementById("TaskForm");
 const taskFormTitle = document.getElementById("taskFormTitle");
@@ -29,7 +24,7 @@ const taskEdit = document.getElementById("taskEdit");
 
 
 
-
+//Uses task form fields to run addNewProject(), closes form
 projectSubmit.addEventListener("click", function() {
     if (!projectForm.checkValidity()) {
         alert("Please fill out all required fields.");
@@ -43,6 +38,7 @@ projectSubmit.addEventListener("click", function() {
     
 });
 
+//Uses project form field to run editProject on selected project, closes form
 projectEdit.addEventListener("click", function() {
     if (!projectForm.checkValidity()) {
         alert("Please fill out all required fields.");
@@ -56,39 +52,31 @@ projectEdit.addEventListener("click", function() {
 });
 
 
-
+//Uses task form fields to run addNewTask(), closes form
 taskSubmit.addEventListener("click", function() {
     if (!taskForm.checkValidity()) {
         alert("Please fill out all required fields.");
     }
     else {
         addNewTask(taskNameField.value, taskDescField.value, taskDueField.value, taskPriorityField.value);
-        taskNameField.value = "";
-        taskDescField.value = "";
-        taskDueField.value = "";
-        taskPriorityField.value = "Low";
         TaskMenu.close();
         updateDOM();
     }
     
 });
 
+//Uses task form field to run editTask() on selected task, closes form
 taskEdit.addEventListener("click", function() {
     if (!taskForm.checkValidity()) {
         alert("Please fill out all required fields.");
     }
     else {
-        editTask(taskNameField.value, taskDescField.value, taskDueField.value, taskPriorityField.value);
-        taskNameField.value = "";
-        taskDescField.value = "";
-        taskDueField.value = "";
-        taskPriorityField.value = "Low";
+        editTask(taskNameField.value, taskDescField.value, taskDueField.value, taskPriorityField.value);;
         TaskMenu.close();
         updateDOM();
     }
     
 });
-
 
 
 //test data
@@ -144,7 +132,6 @@ function updateDOM() {
             projectIcons.classList.add("icons");
             const editIcon = document.createElement("span");
             editIcon.classList.add("editIcon");
-            //To replace "del" and "edit" text with icons later
             editIcon.textContent = "Edit";
             projectIcons.appendChild(editIcon);
             const deleteIcon = document.createElement("span");
@@ -153,12 +140,9 @@ function updateDOM() {
             projectIcons.appendChild(deleteIcon);
 
 
-            //Add event listener for selecting project
+            //Selects project, unselects task
             projectBox.addEventListener('click', function() {
-                console.log("box clicked");
-                // Highlight selected task box
                 selectedProject = project;
-                console.log("Selected Project: " + selectedProject);
                 selectedTask = "";
                 updateDOM();
             });
@@ -244,7 +228,7 @@ function updateDOM() {
                 updateDOM();
             });
 
-            //Edit task
+            //Opens task menu, sets as edit and prefills fields with existing data
             editIcon.addEventListener("click", function(event) {
                 console.log("edit button clicked")
                 selectedTask = task;
@@ -260,14 +244,11 @@ function updateDOM() {
                 updateDOM();
             });
 
-            //Delete task
+            //Deletes currently selected task
+            //TODO: need to add confirmation dialog
             deleteIcon.addEventListener("click", function(event) {
-                console.log("delete button clicked")
-                //need to add confirmation dialog before deleting
                 defaultProjectList.projects[selectedProject].tasks[task].deleteThis();
-                if (selectedTask == task) {
-                    selectedTask = findFirstUndeletedTask();
-                };
+                selectedTask = null;
                 event.stopPropagation();
                 updateDOM();
             });
@@ -280,6 +261,8 @@ function updateDOM() {
     const addTaskBox = document.createElement("div");
     addTaskBox.classList.add("taskEntry", "newTaskEntry");
     addTaskBox.textContent = "+ Add New Task";
+
+    //Opens task form, sets up as create task
     addTaskBox.addEventListener("click", function() {
         console.log("Add Task clicked");
         TaskMenu.showModal();
@@ -287,27 +270,34 @@ function updateDOM() {
         taskSubmit.style.display = "block";
         taskEdit.style.display = "none";
     });
+
     taskList.appendChild(addTaskBox);
 }
 
+//Creates new project in defaultProjectList, clears all form fields
 function addNewProject(name) {
     const newProject = new Project(name);
     defaultProjectList.addProject(newProject);
     projectNameField.value = "";
 }
 
+//Creates new task in currently selected project, clears all form fields
 function addNewTask(name, desc, dueDate, priority) {
     console.log(`Adding new task: ${name}, ${desc}, ${dueDate}, ${priority}`);
     const newTask = new Task(name, desc, dueDate, priority);
     defaultProjectList.projects[selectedProject].addTask(newTask);
+    taskNameField.value = "";
+    taskDescField.value = "";
+    taskDueField.value = "";
+    taskPriorityField.value = "Low";
 }
 
-//Edit Project
+//Edits currently selected project, clears all form fields
 function editProject(newName) {
     defaultProjectList.projects[selectedProject].editName(newName);
     projectNameField.value = "";
 }
-//Edit Task
+//Edits currently selected task, clears all form fields
 function editTask(name, desc, dueDate, priority) {
     defaultProjectList.projects[selectedProject].tasks[selectedTask].editTask(name, desc, dueDate, priority);
     //clear all fields
@@ -317,10 +307,9 @@ function editTask(name, desc, dueDate, priority) {
     taskPriorityField.value = "Low";
 }
 
-
+//finds first selected project
 function findFirstUndeletedProject() {
     for (const project in defaultProjectList.projects) {
-        console.log("Checking", defaultProjectList.projects[project])
         if (defaultProjectList.projects[project].isDeleted === false) {
             return project;
         }
@@ -328,6 +317,7 @@ function findFirstUndeletedProject() {
     return null;
 }
 
+//find last selected project available (used when creating new project)
 function findLastSelectedProject() {
     for (let i = defaultProjectList.projects.length - 1; i >= 0; i--) {
         if (defaultProjectList.projects[i].isDeleted === false) {
@@ -337,6 +327,7 @@ function findLastSelectedProject() {
     return null;
 }
 
+//finds first selected task
 function findFirstUndeletedTask() {
     for (const task in defaultProjectList.projects[selectedProject].tasks) {
         if (defaultProjectList.projects[selectedProject].tasks[task].isDeleted === false) {
@@ -344,5 +335,6 @@ function findFirstUndeletedTask() {
         }
     }
 }
+
 
 updateDOM();
