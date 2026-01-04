@@ -86,11 +86,11 @@ const defaultProject = new Project("Default Project");
 defaultProjectList.addProject(defaultProject);
 const project2 = new Project("Project 2");
 defaultProjectList.addProject(project2);
-const defaultTask = new Task("Task 1", "Some info", "date", "High");
+const defaultTask = new Task("Task 1", "Some info", "date", "high");
 defaultProject.addTask(defaultTask);
-const task2 = new Task("Task 2", "Second Task", "Low", false);
+const task2 = new Task("Task 2", "Second Task", "date", "medium");
 defaultProject.addTask(task2);
-const task3 = new Task("Task 3", "Third Task", "High", false);
+const task3 = new Task("Task 3", "Third Task", "date", "low");
 project2.addTask(task3);
 
 
@@ -176,7 +176,7 @@ function updateDOM() {
     
     //add field for adding new project, sets form up to create project on click
     const addProjectBox = document.createElement("div");
-    addProjectBox.classList.add("projectEntry", "projectEntry");
+    addProjectBox.classList.add("newProjectEntry", "projectEntry");
     addProjectBox.textContent = "+ Add New Project";
     addProjectBox.addEventListener("click", function() {
         projectFormTitle.textContent = "Create Project";
@@ -197,15 +197,28 @@ function updateDOM() {
     for (const task in defaultProjectList.projects[selectedProject].tasks) {
         if (defaultProjectList.projects[selectedProject].tasks[task].isDeleted === false) {
             const taskBox = document.createElement("div");
+            
             taskBox.classList.add("taskEntry");
+            const taskBoxMain = document.createElement("div");
+            taskBoxMain.classList.add("taskMain");
+            taskBox.appendChild(taskBoxMain);
 
+            //Add extra information if selected
             if (task == selectedTask) {
                 taskBox.classList.add("selected");
+                const taskBoxExt = document.createElement("div");
+                taskBoxExt.classList.add("taskExt");
+                taskBox.appendChild(taskBoxExt);
+                
+                const taskPriority = document.createElement("div");
+                taskPriority.textContent = defaultProjectList.projects[selectedProject].tasks[task].priority;
+                taskBoxExt.appendChild(taskPriority);
+                
             }
 
             const taskTitle = document.createElement("h3");
             taskTitle.textContent = defaultProjectList.projects[selectedProject].tasks[task].name;
-            taskBox.appendChild(taskTitle);
+            taskBoxMain.appendChild(taskTitle);
             const taskIcons = document.createElement("div");
             taskIcons.classList.add("icons");
 
@@ -218,7 +231,7 @@ function updateDOM() {
             deleteIcon.classList.add("deleteIcon");
             deleteIcon.textContent = "Del";
             taskIcons.appendChild(deleteIcon);
-            taskBox.appendChild(taskIcons); 
+            taskBoxMain.appendChild(taskIcons); 
 
             //Select task
             taskBox.addEventListener('click', function() {
@@ -336,5 +349,6 @@ function findFirstUndeletedTask() {
     }
 }
 
+console.log(defaultProjectList)
 
 updateDOM();
