@@ -5,18 +5,21 @@ import { Task, Project, ProjectList } from "./taskData.js";
 const projectList = document.getElementById("projectList");
 const taskList = document.getElementById("TaskList");
 
-const newProjectMenu = document.getElementById("newProjectMenu");
-const newProjectForm = document.getElementById("newProjectForm");
+const projectMenu = document.getElementById("projectMenu");
+const projectForm = document.getElementById("projectForm");
+const projectFormTitle = document.getElementById("projectFormTitle");
 const projectNameField = document.getElementById("projectName");
 const projectSubmit = document.getElementById("projectSubmit");
+const projectEdit = document.getElementById("projectEdit");
 
-const editProjectMenu = document.getElementById("editProjectMenu");
-const editProjectForm = document.getElementById("editProjectForm");
-const projectEditNameField = document.getElementById("projectEditName");
-const projectEditSubmit = document.getElementById("projectEditSubmit");
+// const editProjectMenu = document.getElementById("editProjectMenu");
+// const editProjectForm = document.getElementById("editProjectForm");
+// const projectEditNameField = document.getElementById("projectEditName");
+// const projectEditSubmit = document.getElementById("projectEditSubmit");
 
 const TaskMenu = document.getElementById("TaskMenu");
 const taskForm = document.getElementById("TaskForm");
+const taskFormTitle = document.getElementById("taskFormTitle");
 const taskNameField = document.getElementById("taskName");
 const taskDescField = document.getElementById("taskDesc");
 const taskDueField = document.getElementById("taskDueDate");
@@ -28,26 +31,25 @@ const taskEdit = document.getElementById("taskEdit");
 
 
 projectSubmit.addEventListener("click", function() {
-    if (!newProjectForm.checkValidity()) {
+    if (!projectForm.checkValidity()) {
         alert("Please fill out all required fields.");
     }
     else {
         addNewProject(projectNameField.value);
-        projectNameField.value = "";
-        newProjectMenu.close();
+        projectMenu.close();
         selectedProject = findLastSelectedProject();
         updateDOM();
     }
     
 });
 
-projectEditSubmit.addEventListener("click", function() {
-    if (!editProjectForm.checkValidity()) {
+projectEdit.addEventListener("click", function() {
+    if (!projectForm.checkValidity()) {
         alert("Please fill out all required fields.");
     }
     else {
-        editProject(projectEditNameField);
-        editProjectMenu.close();
+        editProject(projectNameField.value);
+        projectMenu.close();
         updateDOM();
     }
     
@@ -113,7 +115,7 @@ function updateDOM() {
     projectList.replaceChildren();
     taskList.replaceChildren();
 
-    //Update Project List
+    //Check if project list is empty
     if (defaultProjectList.projects.filter(proj => proj.isDeleted === false).length === 0) {
             const noProjectsMsg = document.createElement("div");
             noProjectsMsg.classList.add("projectEntry");
@@ -121,6 +123,7 @@ function updateDOM() {
             projectList.appendChild(noProjectsMsg);
     }
 
+    //Generate list of undeleted projects
     for (const project in defaultProjectList.projects) {
         if (defaultProjectList.projects[project].isDeleted === false) {
             //create project box for each project
@@ -149,6 +152,7 @@ function updateDOM() {
             deleteIcon.textContent = "Del";
             projectIcons.appendChild(deleteIcon);
 
+
             //Add event listener for selecting project
             projectBox.addEventListener('click', function() {
                 console.log("box clicked");
@@ -158,18 +162,20 @@ function updateDOM() {
                 selectedTask = "";
                 updateDOM();
             });
+            
 
-            //Event listeners for edit
+            //Event listeners for edit, sets project form up to edit selected project
             editIcon.addEventListener("click", function(event) {
-                console.log("edit button clicked");
                 selectedProject = project;
-                editProjectMenu.showModal();
-                projectEditNameField.value = defaultProjectList.projects[selectedProject].name;
+                projectFormTitle.textContent = "Edit Project";
+                projectSubmit.style.display = "none";
+                projectEdit.style.display = "block";
+                projectMenu.showModal();
+                projectNameField.value = defaultProjectList.projects[selectedProject].name;
             });
 
             //Event listeners for delete
             deleteIcon.addEventListener("click", function(event) {
-                console.log("delete button clicked!")
                 defaultProjectList.projects[project].deleteThis();
                 if (selectedProject == project) {
                     selectedProject = findFirstUndeletedProject();
@@ -184,13 +190,15 @@ function updateDOM() {
         }
     }
     
-    //add field for adding new project
+    //add field for adding new project, sets form up to create project on click
     const addProjectBox = document.createElement("div");
-    addProjectBox.classList.add("projectEntry", "newProjectEntry");
+    addProjectBox.classList.add("projectEntry", "projectEntry");
     addProjectBox.textContent = "+ Add New Project";
     addProjectBox.addEventListener("click", function() {
-        console.log("Add Project clicked123");
-        newProjectMenu.showModal();
+        projectFormTitle.textContent = "Create Project";
+        projectSubmit.style.display = "block";
+        projectEdit.style.display = "none";
+        projectMenu.showModal();
         //Open window to add new project
     });
     projectList.appendChild(addProjectBox);
@@ -239,6 +247,7 @@ function updateDOM() {
             editIcon.addEventListener("click", function(event) {
                 console.log("edit button clicked")
                 selectedTask = task;
+                taskFormTitle.textContent = "Edit Task";
                 taskSubmit.style.display = "none";
                 taskEdit.style.display = "block";
                 TaskMenu.showModal();
@@ -268,6 +277,7 @@ function updateDOM() {
     addTaskBox.addEventListener("click", function() {
         console.log("Add Task clicked");
         TaskMenu.showModal();
+        taskFormTitle.textContent = "Create Task";
         taskSubmit.style.display = "block";
         taskEdit.style.display = "none";
     });
@@ -277,6 +287,7 @@ function updateDOM() {
 function addNewProject(name) {
     const newProject = new Project(name);
     defaultProjectList.addProject(newProject);
+    projectNameField.value = "";
 }
 
 function addNewTask(name, desc, dueDate, priority) {
@@ -288,7 +299,7 @@ function addNewTask(name, desc, dueDate, priority) {
 //Edit Project
 function editProject(newName) {
     defaultProjectList.projects[selectedProject].editName(newName);
-    projectEditNameField.value = "";
+    projectNameField.value = "";
 }
 //Edit Task
 function editTask(name, desc, dueDate, priority) {

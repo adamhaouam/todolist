@@ -94,7 +94,7 @@ header, footer {
     cursor: pointer;
 }
 
-#TaskMenu, #newProjectMenu {
+#TaskMenu, #projectMenu {
   position: absolute;
   top: 50%;
   left: 50%;
