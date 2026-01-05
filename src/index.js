@@ -22,8 +22,6 @@ const taskPriorityField = document.getElementById("taskPriority");
 const taskSubmit = document.getElementById("taskSubmit");
 const taskEdit = document.getElementById("taskEdit");
 
-
-
 //Uses task form fields to run addNewProject(), closes form
 projectSubmit.addEventListener("click", function() {
     if (!projectForm.checkValidity()) {
@@ -32,7 +30,7 @@ projectSubmit.addEventListener("click", function() {
     else {
         addNewProject(projectNameField.value);
         projectMenu.close();
-        selectedProject = findLastSelectedProject();
+        selectedProject = findLastUndeletedProject();
         updateDOM();
     }
     
@@ -59,6 +57,7 @@ taskSubmit.addEventListener("click", function() {
     }
     else {
         addNewTask(taskNameField.value, taskDescField.value, taskDueField.value, taskPriorityField.value);
+        selectedTask = findLastUndeletedTask();
         TaskMenu.close();
         updateDOM();
     }
@@ -93,9 +92,10 @@ defaultProject.addTask(task2);
 const task3 = new Task("Task 3", "Third Task", "2026-05-21", "low");
 project2.addTask(task3);
 
-
 let selectedProject = findFirstUndeletedProject();
 let selectedTask = findFirstUndeletedTask();
+
+updateDOM();
 
 
 function updateDOM() {
@@ -198,19 +198,25 @@ function updateDOM() {
         const thisTask = defaultProjectList.projects[selectedProject].tasks[task];
         if (thisTask.isDeleted === false) {
             const taskBox = document.createElement("div");
-            
             taskBox.classList.add("taskEntry");
+
             const taskBoxMain = document.createElement("div");
             taskBoxMain.classList.add("taskMain");
             taskBox.appendChild(taskBoxMain);
 
             //Add extra information if selected
             if (task == selectedTask) {
+
+                const taskDescBox = document.createElement("div");
+                taskDescBox.textContent = thisTask.desc;
+                taskDescBox.classList.add("taskDescBox");
+                taskBox.appendChild(taskDescBox);
+
                 taskBox.classList.add("selected");
                 const taskBoxExt = document.createElement("div");
                 taskBoxExt.classList.add("taskExt");
-                taskBox.appendChild(taskBoxExt);
-                
+                taskBox.appendChild(taskBoxExt);             
+
                 const taskPriority = document.createElement("div");
                 taskPriority.textContent = capitalizeFirstLetter(thisTask.priority);
                 taskPriority.classList.add(thisTask.priority);
@@ -223,6 +229,17 @@ function updateDOM() {
                     console.log(thisTask.dueDate);
                 }
             }
+
+            const taskCompleteButton = document.createElement("input");
+            taskCompleteButton.type = "checkbox";
+            taskCompleteButton.checked = thisTask.done;
+
+            taskCompleteButton.addEventListener("click", function(event) {
+                thisTask.toggleDone();
+                console.log(thisTask);
+                event.stopPropagation();
+            })
+            taskBoxMain.appendChild(taskCompleteButton);
 
             const taskTitle = document.createElement("h3");
             taskTitle.textContent = thisTask.name;
@@ -337,10 +354,22 @@ function findFirstUndeletedProject() {
 }
 
 //find last selected project available (used when creating new project)
-function findLastSelectedProject() {
+function findLastUndeletedProject() {
     for (let i = defaultProjectList.projects.length - 1; i >= 0; i--) {
         if (defaultProjectList.projects[i].isDeleted === false) {
             return i;
+        }
+    }
+    return null;
+}
+
+function findLastUndeletedTask() {
+    const tasks = defaultProjectList.projects[selectedProject].tasks;
+    console.log(tasks)
+    for (let i = tasks.length - 1; i >= 0; i--) {
+        if (tasks[i].isDeleted === false) {
+            return i;
+            console.log(i)
         }
     }
     return null;
@@ -354,10 +383,6 @@ function findFirstUndeletedTask() {
         }
     }
 }
-
-console.log(defaultProjectList)
-
-updateDOM();
 
 //Return capitalised string
 function capitalizeFirstLetter(string) {

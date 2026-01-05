@@ -15,7 +15,7 @@ class Task extends Entry {
     constructor(name, desc, dueDate, priority, status = false, id = crypto.randomUUID(), isDeleted = false) {
         super(name, isDeleted);
         this.id = id;
-        this.detail = desc;
+        this.desc = desc;
         this.dueDate = dueDate;
         this.priority = priority;
         this.done = status;
