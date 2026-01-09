@@ -141,6 +141,10 @@ header, footer {
   padding: 3px;
 }
 
+.done {
+  text-decoration: line-through;
+}
+
 
 .high {
   background-color: red;

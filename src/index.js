@@ -238,12 +238,18 @@ function updateDOM() {
                 thisTask.toggleDone();
                 console.log(thisTask);
                 event.stopPropagation();
+                updateDOM();
             })
             taskBoxMain.appendChild(taskCompleteButton);
 
             const taskTitle = document.createElement("h3");
             taskTitle.textContent = thisTask.name;
             taskBoxMain.appendChild(taskTitle);
+
+            if (thisTask.done == true) {
+                taskTitle.classList.add("done");
+            }
+
             const taskIcons = document.createElement("div");
             taskIcons.classList.add("icons");
 
