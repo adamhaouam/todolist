@@ -241,11 +241,12 @@ function updateDOM() {
 
             const taskCompleteButton = document.createElement("input");
             taskCompleteButton.type = "checkbox";
-            taskCompleteButton.checked = thisTask.done;
+            taskCompleteButton.checked = thisTask.isDone;
 
             taskCompleteButton.addEventListener("click", function(event) {
                 thisTask.toggleDone();
                 console.log(thisTask);
+                setLocalData(defaultProjectList);
                 event.stopPropagation();
                 updateDOM();
             })
@@ -255,7 +256,7 @@ function updateDOM() {
             taskTitle.textContent = thisTask.name;
             taskBoxMain.appendChild(taskTitle);
 
-            if (thisTask.done == true) {
+            if (thisTask.isDone == true) {
                 taskTitle.classList.add("done");
             }
 

@@ -12,16 +12,16 @@ class Entry {
 
 
 class Task extends Entry {
-    constructor(name, desc, dueDate, priority, status = false, isDeleted = false) {
+    constructor(name, desc, dueDate, priority, isDone = false, isDeleted = false) {
         super(name, isDeleted);
         this.desc = desc;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.done = status;
+        this.isDone = isDone;
     }
 
     toggleDone() {
-        this.done = !this.done;
+        this.isDone = !this.isDone;
     }
     
     editTask(name, desc, dueDate, priority) {

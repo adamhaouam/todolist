@@ -14,10 +14,11 @@ export function getLocalData() {
             restoredProjectList.addProject(restoredProject);
             for (let task in thisProject.tasks) {
                 const thisTask = thisProject.tasks[task];
-                const restoredTask = new Task(thisTask.name, thisTask.desc, thisTask.dueDate, thisTask.priority, thisTask.status, thisTask.isDeleted);
+                const restoredTask = new Task(thisTask.name, thisTask.desc, thisTask.dueDate, thisTask.priority, thisTask.isDone, thisTask.isDeleted);
                 restoredProject.addTask(restoredTask);
             }
         }
+
 
         // console.log("Exporting test data");
         // defaultProjectList = new ProjectList();
