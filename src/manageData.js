@@ -1,11 +1,25 @@
 import { Task, Project, ProjectList } from "./taskData.js";
 
 export function getLocalData() {
-    let defaultProjectList;
+    let restoredProjectList;
     if (storageAvailable("localStorage") && localStorage.projectList) {
 
-        defaultProjectList = JSON.parse(localStorage.projectList);
-        // console.log("EXTRACT LOCAL DATA");
+        const exportedProjectList = JSON.parse(localStorage.projectList);
+        console.log(exportedProjectList);
+        restoredProjectList = new ProjectList();
+        for (let project in exportedProjectList.projects) {
+            console.log(`Project ${project}!!!!`);
+            let thisProject = exportedProjectList.projects[project];
+            const restoredProject = new Project(thisProject.name, thisProject.isDeleted);
+            restoredProjectList.addProject(restoredProject);
+            for (let task in thisProject.tasks) {
+                const thisTask = thisProject.tasks[task];
+                const restoredTask = new Task(thisTask.name, thisTask.desc, thisTask.dueDate, thisTask.priority, thisTask.status, thisTask.isDeleted);
+                restoredProject.addTask(restoredTask);
+            }
+        }
+
+        // console.log("Exporting test data");
         // defaultProjectList = new ProjectList();
         // const defaultProject = new Project("Default Project");
         // defaultProjectList.addProject(defaultProject);
@@ -19,14 +33,15 @@ export function getLocalData() {
         // project2.addTask(task3);
     }
     else {
-        defaultProjectList = new ProjectList();
+        restoredProjectList = new ProjectList();
         const defaultProject = new Project("Default Project");
-        defaultProjectList.addProject(defaultProject);
+        restoredProjectList.addProject(defaultProject);
     }
-    return defaultProjectList;
+    return restoredProjectList;
 }
 
 export function setLocalData(projectList) {
+    console.log(projectList);
     localStorage.projectList = JSON.stringify(projectList);
 }
 

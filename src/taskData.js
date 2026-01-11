@@ -12,9 +12,8 @@ class Entry {
 
 
 class Task extends Entry {
-    constructor(name, desc, dueDate, priority, status = false, id = crypto.randomUUID(), isDeleted = false) {
+    constructor(name, desc, dueDate, priority, status = false, isDeleted = false) {
         super(name, isDeleted);
-        this.id = id;
         this.desc = desc;
         this.dueDate = dueDate;
         this.priority = priority;
@@ -34,9 +33,8 @@ class Task extends Entry {
 }
 
 class Project extends Entry {
-    constructor(name, isDeleted = false, id = crypto.randomUUID()) {
+    constructor(name, isDeleted = false) {
         super(name, isDeleted);
-        this.id = id;
         this.tasks = [];
     }
 

@@ -98,6 +98,8 @@ taskEdit.addEventListener("click", function() {
 
 
 const defaultProjectList = getLocalData();
+console.log("fadsfsdfas");
+console.log(defaultProjectList);
 
 let selectedProject = findFirstUndeletedProject();
 let selectedTask = findFirstUndeletedTask();
@@ -296,8 +298,10 @@ function updateDOM() {
             //Deletes currently selected task
             //TODO: need to add confirmation dialog
             deleteIcon.addEventListener("click", function(event) {
-                thisTask.deleteThis();
-                selectedTask = null;
+                if (confirm(`Are you sure you want to delete task ${thisTask.name}?`)) {
+                    thisTask.deleteThis();
+                    selectedTask = null;
+                }
                 event.stopPropagation();
                 updateDOM();
             });
@@ -371,7 +375,7 @@ function findFirstUndeletedProject() {
     return null;
 }
 
-//find last selected project available (used when creating new project)
+//find last project available (used when creating new project)
 function findLastUndeletedProject() {
     for (let i = defaultProjectList.projects.length - 1; i >= 0; i--) {
         if (defaultProjectList.projects[i].isDeleted === false) {
@@ -381,6 +385,7 @@ function findLastUndeletedProject() {
     return null;
 }
 
+//find last task available (used when creating a new task)
 function findLastUndeletedTask() {
     const tasks = defaultProjectList.projects[selectedProject].tasks;
     console.log(tasks)
