@@ -1,6 +1,7 @@
 import "./styles.css";
 import '../node_modules/modern-normalize';
 import { Task, Project, ProjectList } from "./taskData.js";
+import { getLocalData, setLocalData } from "./manageData.js";
 
 const projectList = document.getElementById("projectList");
 const taskList = document.getElementById("TaskList");
@@ -80,17 +81,23 @@ taskEdit.addEventListener("click", function() {
 
 //test data
 //creates 2 projects with 2 tasks in the default project and 1 task in the 2nd project
-const defaultProjectList = new ProjectList();
-const defaultProject = new Project("Default Project");
-defaultProjectList.addProject(defaultProject);
-const project2 = new Project("Project 2");
-defaultProjectList.addProject(project2);
-const defaultTask = new Task("Task 1", "Some info", "2026-01-21", "high");
-defaultProject.addTask(defaultTask);
-const task2 = new Task("Task 2", "Second Task", "", "medium");
-defaultProject.addTask(task2);
-const task3 = new Task("Task 3", "Third Task", "2026-05-21", "low");
-project2.addTask(task3);
+
+
+
+// const defaultProjectList = new ProjectList();
+// const defaultProject = new Project("Default Project");
+// defaultProjectList.addProject(defaultProject);
+// const project2 = new Project("Project 2");
+// defaultProjectList.addProject(project2);
+// const defaultTask = new Task("Task 1", "Some info", "2026-01-21", "high");
+// defaultProject.addTask(defaultTask);
+// const task2 = new Task("Task 2", "Second Task", "", "medium");
+// defaultProject.addTask(task2);
+// const task3 = new Task("Task 3", "Third Task", "2026-05-21", "low");
+// project2.addTask(task3);
+
+
+const defaultProjectList = getLocalData();
 
 let selectedProject = findFirstUndeletedProject();
 let selectedTask = findFirstUndeletedTask();
@@ -320,7 +327,9 @@ function updateDOM() {
 function addNewProject(name) {
     const newProject = new Project(name);
     defaultProjectList.addProject(newProject);
+    setLocalData(defaultProjectList);
     projectNameField.value = "";
+    
 }
 
 //Creates new task in currently selected project, clears all form fields
@@ -328,25 +337,28 @@ function addNewTask(name, desc, dueDate, priority) {
     console.log(`Adding new task: ${name}, ${desc}, ${dueDate}, ${priority}`);
     const newTask = new Task(name, desc, dueDate, priority);
     defaultProjectList.projects[selectedProject].addTask(newTask);
+    setLocalData(defaultProjectList);
     taskNameField.value = "";
     taskDescField.value = "";
     taskDueField.value = "";
-    taskPriorityField.value = "Low";
+    taskPriorityField.value = "low";
 }
 
 //Edits currently selected project, clears all form fields
 function editProject(newName) {
     defaultProjectList.projects[selectedProject].editName(newName);
+    setLocalData(defaultProjectList);
     projectNameField.value = "";
 }
 //Edits currently selected task, clears all form fields
 function editTask(name, desc, dueDate, priority) {
     defaultProjectList.projects[selectedProject].tasks[selectedTask].editTask(name, desc, dueDate, priority);
+    setLocalData(defaultProjectList);
     //clear all fields
     taskNameField.value = "";
     taskDescField.value = "";
     taskDueField.value = "";
-    taskPriorityField.value = "Low";
+    taskPriorityField.value = "low";
 }
 
 //finds first selected project
